@@ -40,11 +40,21 @@ jobs:
             /p:DeployOnBuild=true `
             /p:WebPublishMethod=FileSystem `
             /p:publishUrl="C:\temp\publish"
+            
+    - name: Check Publish Output
+      run: |
+        echo "Checking publish folder..."
+        dir "C:\temp\publish"
 
-      - name: Deploy to IIS
-        run: |
+    - name: Deploy to IIS
+       run: |
           if (!(Test-Path "C:\inetpub\wwwroot\contrack")) {
             New-Item -ItemType Directory -Path "C:\inetpub\wwwroot\contrack"
           }
 
           xcopy "C:\temp\publish\*" "C:\inetpub\wwwroot\contrack" /E /I /Y /C
+          
+    - name: Check IIS Folder
+      run: |
+        echo "Checking IIS folder..."
+        dir "C:\inetpub\wwwroot\contrack"
