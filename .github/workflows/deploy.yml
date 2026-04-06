@@ -33,9 +33,14 @@ jobs:
             Remove-Item "C:\temp\publish\*" -Recurse -Force -ErrorAction SilentlyContinue
           }
 
-      - name: Publish
+      - name: Publish (FINAL CORRECT)
         run: |
-          & "C:\Program Files (x86)\Microsoft Visual Studio\18\BuildTools\MSBuild\Current\Bin\amd64\MSBuild.exe" "Contrack\Contrack.csproj" /p:Configuration=Release /p:OutDir="C:\temp\publish\\"
+          & "C:\Program Files (x86)\Microsoft Visual Studio\18\BuildTools\MSBuild\Current\Bin\amd64\MSBuild.exe" "Contrack\Contrack.csproj" `
+          /p:Configuration=Release `
+          /p:DeployOnBuild=true `
+          /p:WebPublishMethod=FileSystem `
+          /p:DeleteExistingFiles=true `
+          /p:publishUrl="C:\temp\publish"
 
       - name: Check Publish Output
         run: |
