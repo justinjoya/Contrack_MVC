@@ -33,7 +33,7 @@ jobs:
             Remove-Item "C:\temp\publish\*" -Recurse -Force -ErrorAction SilentlyContinue
           }
 
-      - name: Publish (FINAL FIX)
+      - name: Publish
         run: |
           & "C:\Program Files (x86)\Microsoft Visual Studio\18\BuildTools\MSBuild\Current\Bin\amd64\MSBuild.exe" "Contrack\Contrack.csproj" /p:Configuration=Release /p:OutDir="C:\temp\publish\\"
 
@@ -48,7 +48,7 @@ jobs:
             New-Item -ItemType Directory -Path "C:\inetpub\wwwroot\contrack"
           }
 
-          xcopy "C:\temp\publish\*" "C:\inetpub\wwwroot\contrack" /E /I /Y /C
+          robocopy "C:\temp\publish" "C:\inetpub\wwwroot\contrack" /E /NFL /NDL /NJH /NJS /NC /NS
 
       - name: Check IIS Folder
         run: |
