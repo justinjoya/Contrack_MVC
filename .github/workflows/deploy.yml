@@ -50,6 +50,12 @@ jobs:
 
           robocopy "C:\temp\publish" "C:\inetpub\wwwroot\contrack" /E /NFL /NDL /NJH /NJS /NC /NS
 
+          if ($LASTEXITCODE -le 7) {
+            exit 0
+          } else {
+            exit $LASTEXITCODE
+          }
+
       - name: Check IIS Folder
         run: |
           echo "Checking IIS folder..."
