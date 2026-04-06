@@ -1,0 +1,36 @@
+name: Deploy to IIS
+
+on:
+  push:
+    branches:
+      - deploy
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v1.1
+
+      - name: Restore Packages
+        run: nuget restore
+
+      - name: Build
+        run: msbuild Contrack_MVC.csproj /p:Configuration=Release
+
+      - name: Publish
+        run: |
+          msbuild Contrack_MVC.csproj /p:Configuration=Release /p:DeployOnBuild=true /p:WebPublishMethod=FileSystem /p:publishUrl="C:\temp\publish"
+
+      - name: Deploy to IIS
+        run: |
+          if exist "C:\inetpub\wwwroot\contrack" rmdir /s /q "C:\inetpub\wwwroot\contrack"
+          mkdir "C:\inetpub\wwwroot\contrack"
+          xcopy /E /Y /I "C:\temp\publish" "C:\inetpub\wwwroot\contrack"
+
+      - name: Restart IIS
+        run: iisreset
