@@ -13,9 +13,9 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      - name: Restore NuGet Packages
+      - name: Restore NuGet Packages (IMPORTANT)
         run: |
-          & "C:\Program Files (x86)\Microsoft Visual Studio\18\BuildTools\MSBuild\Current\Bin\amd64\MSBuild.exe" Contrack.sln /t:Restore
+          & "C:\actions-runner\nuget.exe" restore Contrack.sln
 
       - name: Build Solution
         run: |
