@@ -16,9 +16,6 @@ jobs:
       - name: Setup NuGet
         uses: NuGet/setup-nuget@v1
 
-      - name: Restore Packages
-        run: nuget restore Contrack.sln
-
       - name: Build Solution
         run: |
           "C:\Program Files\Microsoft Visual Studio\2022\BuildTools\MSBuild\Current\Bin\MSBuild.exe" Contrack.sln /p:Configuration=Release
