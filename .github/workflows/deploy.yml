@@ -17,16 +17,16 @@ jobs:
         uses: NuGet/setup-nuget@v1
 
       - name: Build Solution
-        run: |
-          "C:\Program Files\Microsoft Visual Studio\2022\BuildTools\MSBuild\Current\Bin\MSBuild.exe" Contrack.sln /p:Configuration=Release
+  run: |
+    & "C:\Program Files\Microsoft Visual Studio\2022\BuildTools\MSBuild\Current\Bin\MSBuild.exe" Contrack.sln /p:Configuration=Release
 
-      - name: Create Publish Folder
-        run: |
-          if not exist "C:\temp\publish" mkdir "C:\temp\publish"
+- name: Create Publish Folder
+  run: |
+    if (!(Test-Path "C:\temp\publish")) { New-Item -ItemType Directory -Path "C:\temp\publish" }
 
-      - name: Publish
-        run: |
-          "C:\Program Files\Microsoft Visual Studio\2022\BuildTools\MSBuild\Current\Bin\MSBuild.exe" Contrack.sln /p:Configuration=Release /p:DeployOnBuild=true /p:WebPublishMethod=FileSystem /p:publishUrl="C:\temp\publish"
+- name: Publish
+  run: |
+    & "C:\Program Files\Microsoft Visual Studio\2022\BuildTools\MSBuild\Current\Bin\MSBuild.exe" Contrack.sln /p:Configuration=Release /p:DeployOnBuild=true /p:WebPublishMethod=FileSystem /p:publishUrl="C:\temp\publish"
 
       - name: Deploy to IIS
         run: |
