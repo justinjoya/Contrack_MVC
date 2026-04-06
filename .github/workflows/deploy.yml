@@ -33,14 +33,8 @@ jobs:
 
       - name: Deploy to IIS
         run: |
-          iisreset /stop
-
-          if (Test-Path "C:\inetpub\wwwroot\contrack") {
-            cmd /c "rmdir /s /q C:\inetpub\wwwroot\contrack"
+          if (!(Test-Path "C:\inetpub\wwwroot\contrack")) {
+            New-Item -ItemType Directory -Path "C:\inetpub\wwwroot\contrack"
           }
 
-          mkdir "C:\inetpub\wwwroot\contrack"
-
-          xcopy "C:\temp\publish\*" "C:\inetpub\wwwroot\contrack" /E /I /Y
-
-          iisreset /start
+          xcopy "C:\temp\publish\*" "C:\inetpub\wwwroot\contrack" /E /I /Y /C
