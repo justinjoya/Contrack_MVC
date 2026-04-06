@@ -33,19 +33,20 @@ jobs:
             Remove-Item "C:\temp\publish\*" -Recurse -Force -ErrorAction SilentlyContinue
           }
 
-      - name: Publish (FINAL CORRECT)
+      - name: Publish 
         run: |
           & "C:\Program Files (x86)\Microsoft Visual Studio\18\BuildTools\MSBuild\Current\Bin\amd64\MSBuild.exe" "Contrack\Contrack.csproj" `
           /p:Configuration=Release `
           /p:DeployOnBuild=true `
+          /p:DeployDefaultTarget=WebPublish `
           /p:WebPublishMethod=FileSystem `
           /p:DeleteExistingFiles=true `
           /p:publishUrl="C:\temp\publish"
 
-      - name: Check Publish Output
+      - name: Verify Publish Files
         run: |
-          echo "Checking publish folder..."
-          dir "C:\temp\publish"
+          echo "FILES INSIDE PUBLISH:"
+          Get-ChildItem -Path "C:\temp\publish" -Recurse
 
       - name: Deploy to IIS
         run: |
@@ -63,5 +64,5 @@ jobs:
 
       - name: Check IIS Folder
         run: |
-          echo "Checking IIS folder..."
-          dir "C:\inetpub\wwwroot\contrack"
+          echo "FILES IN IIS:"
+          Get-ChildItem -Path "C:\inetpub\wwwroot\contrack" -Recurse
