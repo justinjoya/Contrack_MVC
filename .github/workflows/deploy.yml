@@ -13,7 +13,7 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      - name: Restore NuGet Packages (IMPORTANT)
+      - name: Restore NuGet Packages
         run: |
           & "C:\actions-runner\nuget.exe" restore Contrack.sln
 
@@ -33,11 +33,14 @@ jobs:
 
       - name: Deploy to IIS
         run: |
-          if (Test-Path "C:\inetpub\wwwroot\contrack") {
-            Remove-Item "C:\inetpub\wwwroot\contrack" -Recurse -Force
-          }
-          New-Item -ItemType Directory -Path "C:\inetpub\wwwroot\contrack"
-          Copy-Item "C:\temp\publish\*" "C:\inetpub\wwwroot\contrack" -Recurse -Force
+          iisreset /stop
 
-      - name: Restart IIS
-        run: iisreset
+          if (Test-Path "C:\inetpub\wwwroot\contrack") {
+            cmd /c "rmdir /s /q C:\inetpub\wwwroot\contrack"
+          }
+
+          mkdir "C:\inetpub\wwwroot\contrack"
+
+          xcopy "C:\temp\publish\*" "C:\inetpub\wwwroot\contrack" /E /I /Y
+
+          iisreset /start
