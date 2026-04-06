@@ -15,7 +15,7 @@ jobs:
 
       - name: Build Solution
         run: |
-          & "C:\Program Files\Microsoft Visual Studio\2022\BuildTools\MSBuild\Current\Bin\MSBuild.exe" Contrack.sln /p:Configuration=Release
+          & "C:\Program Files (x86)\Microsoft Visual Studio\18\BuildTools\MSBuild\Current\Bin\amd64\MSBuild.exe" Contrack.sln /p:Configuration=Release
 
       - name: Create Publish Folder
         run: |
@@ -25,7 +25,7 @@ jobs:
 
       - name: Publish
         run: |
-          & "C:\Program Files\Microsoft Visual Studio\2022\BuildTools\MSBuild\Current\Bin\MSBuild.exe" Contrack.sln /p:Configuration=Release /p:DeployOnBuild=true /p:WebPublishMethod=FileSystem /p:publishUrl="C:\temp\publish"
+          & "C:\Program Files (x86)\Microsoft Visual Studio\18\BuildTools\MSBuild\Current\Bin\amd64\MSBuild.exe" Contrack.sln /p:Configuration=Release /p:DeployOnBuild=true /p:WebPublishMethod=FileSystem /p:publishUrl="C:\temp\publish"
 
       - name: Deploy to IIS
         run: |
