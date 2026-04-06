@@ -27,9 +27,19 @@ jobs:
             New-Item -ItemType Directory -Path "C:\temp\publish"
           }
 
+      - name: Clean Publish Folder
+        run: |
+            if (Test-Path "C:\temp\publish") {
+            Remove-Item "C:\temp\publish\*" -Recurse -Force -ErrorAction SilentlyContinue
+            }
+        
       - name: Publish
         run: |
-          & "C:\Program Files (x86)\Microsoft Visual Studio\18\BuildTools\MSBuild\Current\Bin\amd64\MSBuild.exe" Contrack.sln /p:Configuration=Release /p:DeployOnBuild=true /p:WebPublishMethod=FileSystem /p:publishUrl="C:\temp\publish"
+            & "C:\Program Files (x86)\Microsoft Visual Studio\18\BuildTools\MSBuild\Current\Bin\amd64\MSBuild.exe" Contrack\Contrack.csproj `
+            /p:Configuration=Release `
+            /p:DeployOnBuild=true `
+            /p:WebPublishMethod=FileSystem `
+            /p:publishUrl="C:\temp\publish"
 
       - name: Deploy to IIS
         run: |
