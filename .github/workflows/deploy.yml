@@ -11,7 +11,7 @@ jobs:
 
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Restore NuGet Packages
         run: |
@@ -29,32 +29,28 @@ jobs:
 
       - name: Clean Publish Folder
         run: |
-            if (Test-Path "C:\temp\publish") {
+          if (Test-Path "C:\temp\publish") {
             Remove-Item "C:\temp\publish\*" -Recurse -Force -ErrorAction SilentlyContinue
-            }
-        
-      - name: Publish
-        run: |
-            & "C:\Program Files (x86)\Microsoft Visual Studio\18\BuildTools\MSBuild\Current\Bin\amd64\MSBuild.exe" Contrack\Contrack.csproj `
-            /p:Configuration=Release `
-            /p:DeployOnBuild=true `
-            /p:WebPublishMethod=FileSystem `
-            /p:publishUrl="C:\temp\publish"
-            
-    - name: Check Publish Output
-      run: |
-        echo "Checking publish folder..."
-        dir "C:\temp\publish"
+          }
 
-    - name: Deploy to IIS
-       run: |
+      - name: Publish (FINAL FIX)
+        run: |
+          & "C:\Program Files (x86)\Microsoft Visual Studio\18\BuildTools\MSBuild\Current\Bin\amd64\MSBuild.exe" "Contrack\Contrack.csproj" /p:Configuration=Release /p:OutDir="C:\temp\publish\\"
+
+      - name: Check Publish Output
+        run: |
+          echo "Checking publish folder..."
+          dir "C:\temp\publish"
+
+      - name: Deploy to IIS
+        run: |
           if (!(Test-Path "C:\inetpub\wwwroot\contrack")) {
             New-Item -ItemType Directory -Path "C:\inetpub\wwwroot\contrack"
           }
 
           xcopy "C:\temp\publish\*" "C:\inetpub\wwwroot\contrack" /E /I /Y /C
-          
-    - name: Check IIS Folder
-      run: |
-        echo "Checking IIS folder..."
-        dir "C:\inetpub\wwwroot\contrack"
+
+      - name: Check IIS Folder
+        run: |
+          echo "Checking IIS folder..."
+          dir "C:\inetpub\wwwroot\contrack"
